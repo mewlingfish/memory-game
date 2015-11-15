@@ -1,0 +1,626 @@
+#include "stdafx.h"
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <stdlib.h>
+#include <time.h>
+#include <iomanip>
+#include <algorithm>
+#include <dos.h>
+#include <stdio.h>
+#include <conio.h>
+#ifdef __unix__
+# include <unistd.h>
+#elif defined _WIN32
+# include <windows.h>
+#define sleep(x) Sleep(1000 * x)
+#endif
+using namespace std;
+
+int indexArrayE[8];
+int indexArrayN[18];
+int indexArrayH[32];
+
+string hiddenE[4][4];
+string hiddenN[6][6];
+string hiddenH[8][8];
+
+/*******************************************************************************************************************/
+
+string themeHouseholdObjects[50] = { "chair","pencil","broom","bottle","sofa","stool","computer","printer","pen","stapler","tape","box","notepad",
+"poster","monitor","mouse","TV","comb","brush","toys","picture","flower","napkins","doorknob","door","clock","videos","bags",
+"plates","blanket","cup","mug","window","plushies","charger","notebook","binder","apron","book","crayons","lamp","snacks",
+"shoes", "boots","globe","tablet","phone","clothes","vacuum","spoon" };
+
+string themeKeyTerms[50] = { "cout","cin","int","char","for","double","boolean","float","while","switch","endl","#include",
+"if","else","break","case","return","class","true","false","try","or","and","long","default","do","while","goto","void",
+"catch","friend","short","enum","concept","xor","continue","not","signed","sizeof","struct","mutable","private","this",
+"using","public","const","bitand","bitor","alignof","inline" };
+
+string themeColors[50] = { "red","orange","yellow","orange","green","blue","purple","pink","white","grey","black","cyan",
+"mahogany","magenta","beige","violet","blond","golden","silver","copper","celeste","coral","peach","tan","brown","ivory",
+"wheat","khaki","charcoal","azure","olive","lime","salmon","puce","lavender","fuchsia","indigo","mauve","plum","maroon",
+"crimson","teal","circus","mango","amethyst","raspberry","sand","taupe","platinum","apricot" };
+
+string themeChoice[50];
+
+/*******************************************************************************************************************/
+
+void printBoardE() {
+	cout << endl;
+	cout << setw(8) << "         1       2       3      4     " << endl << endl;
+	cout << setw(8) << "1   | " << hiddenE[0][0] << " | " << hiddenE[0][1] << " | " << hiddenE[0][2] << " | " << hiddenE[0][3] << " |" << endl;
+	cout << setw(8) << "     -----------------------------------------" << endl;
+	cout << setw(8) << "2   | " << hiddenE[1][0] << " | " << hiddenE[1][1] << " | " << hiddenE[1][2] << " | " << hiddenE[1][3] << " |" << endl;
+	cout << setw(8) << "     -----------------------------------------" << endl;
+	cout << setw(8) << "3   | " << hiddenE[2][0] << " | " << hiddenE[2][1] << " | " << hiddenE[2][2] << " | " << hiddenE[2][3] << " |" << endl;
+	cout << setw(8) << "     -----------------------------------------" << endl;
+	cout << setw(8) << "4   | " << hiddenE[3][0] << " | " << hiddenE[3][1] << " | " << hiddenE[3][2] << " | " << hiddenE[3][3] << " |" << endl;
+	cout << endl;
+}
+
+void printBoardN() {
+	cout << endl;
+	cout << setw(8) << "         1         2         3         4        5        6    " << endl << endl;
+	cout << setw(8) << "1   | " << hiddenN[0][0] << " | " << hiddenN[0][1] << " | " << hiddenN[0][2] << " | " << hiddenN[0][3] << " | " << hiddenN[0][4] << " | " << hiddenN[0][5] << " |" << endl;
+	cout << setw(8) << "     --------------------------------------------------------------" << endl;
+	cout << setw(8) << "2   | " << hiddenN[1][0] << " | " << hiddenN[1][1] << " | " << hiddenN[1][2] << " | " << hiddenN[1][3] << " | " << hiddenN[1][4] << " | " << hiddenN[1][5] << " |" << endl;
+	cout << setw(8) << "     --------------------------------------------------------------" << endl;
+	cout << setw(8) << "3   | " << hiddenN[2][0] << " | " << hiddenN[2][1] << " | " << hiddenN[2][2] << " | " << hiddenN[2][3] << " | " << hiddenN[2][4] << " | " << hiddenN[2][5] << " |" << endl;
+	cout << setw(8) << "     --------------------------------------------------------------" << endl;
+	cout << setw(8) << "4   | " << hiddenN[3][0] << " | " << hiddenN[3][1] << " | " << hiddenN[3][2] << " | " << hiddenN[3][3] << " | " << hiddenN[3][4] << " | " << hiddenN[3][5] << " |" << endl;
+	cout << setw(8) << "     --------------------------------------------------------------" << endl;
+	cout << setw(8) << "5   | " << hiddenN[4][0] << " | " << hiddenN[4][1] << " | " << hiddenN[4][2] << " | " << hiddenN[4][3] << " | " << hiddenN[4][4] << " | " << hiddenN[4][5] << " |" << endl;
+	cout << setw(8) << "     --------------------------------------------------------------" << endl;
+	cout << setw(8) << "6   | " << hiddenN[5][0] << " | " << hiddenN[5][1] << " | " << hiddenN[5][2] << " | " << hiddenN[5][3] << " | " << hiddenN[5][4] << " | " << hiddenN[5][5] << " |" << endl;
+	cout << endl;
+}
+
+void printBoardH() {
+	cout << endl;
+	cout << setw(8) << "         1         2         3         4        5        6    " << endl << endl;
+	cout << setw(8) << "1   | " << hiddenH[0][0] << " | " << hiddenH[0][1] << " | " << hiddenH[0][2] << " | " << hiddenH[0][3] << " | " << hiddenH[0][4] << " | " << hiddenH[0][5] << " | " << hiddenH[0][6] << " | " << hiddenH[0][7] << " | " << endl;
+	cout << setw(8) << "     ---------------------------------------------------------------------------" << endl;
+	cout << setw(8) << "2   | " << hiddenH[1][0] << " | " << hiddenH[1][1] << " | " << hiddenH[1][2] << " | " << hiddenH[1][3] << " | " << hiddenH[1][4] << " | " << hiddenH[1][5] << " | " << hiddenH[1][6] << " | " << hiddenH[1][7] << " | " << endl;
+	cout << setw(8) << "     ---------------------------------------------------------------------------" << endl;
+	cout << setw(8) << "3   | " << hiddenH[2][0] << " | " << hiddenH[2][1] << " | " << hiddenH[2][2] << " | " << hiddenH[2][3] << " | " << hiddenH[2][4] << " | " << hiddenH[2][5] << " | " << hiddenH[2][6] << " | " << hiddenH[2][7] << " | " << endl;
+	cout << setw(8) << "     ---------------------------------------------------------------------------" << endl;
+	cout << setw(8) << "4   | " << hiddenH[3][0] << " | " << hiddenH[3][1] << " | " << hiddenH[3][2] << " | " << hiddenH[3][3] << " | " << hiddenH[3][4] << " | " << hiddenH[3][5] << " | " << hiddenH[3][6] << " | " << hiddenH[3][7] << " | " << endl;
+	cout << setw(8) << "     ---------------------------------------------------------------------------" << endl;
+	cout << setw(8) << "5   | " << hiddenH[4][0] << " | " << hiddenH[4][1] << " | " << hiddenH[4][2] << " | " << hiddenH[4][3] << " | " << hiddenH[4][4] << " | " << hiddenH[4][5] << " | " << hiddenH[4][6] << " | " << hiddenH[4][7] << " | " << endl;
+	cout << setw(8) << "     ---------------------------------------------------------------------------" << endl;
+	cout << setw(8) << "6   | " << hiddenH[5][0] << " | " << hiddenH[5][1] << " | " << hiddenH[5][2] << " | " << hiddenH[5][3] << " | " << hiddenH[5][4] << " | " << hiddenH[5][5] << " | " << hiddenH[5][6] << " | " << hiddenH[5][7] << " | " << endl;
+	cout << setw(8) << "     ---------------------------------------------------------------------------" << endl;
+	cout << setw(8) << "7   | " << hiddenH[6][0] << " | " << hiddenH[6][1] << " | " << hiddenH[6][2] << " | " << hiddenH[6][3] << " | " << hiddenH[6][4] << " | " << hiddenH[6][5] << " | " << hiddenH[6][6] << " | " << hiddenH[6][7] << " | " << endl;
+	cout << setw(8) << "     ---------------------------------------------------------------------------" << endl;
+	cout << setw(8) << "8   | " << hiddenH[7][0] << " | " << hiddenH[7][1] << " | " << hiddenH[7][2] << " | " << hiddenH[7][3] << " | " << hiddenH[7][4] << " | " << hiddenH[7][5] << " | " << hiddenH[7][6] << " | " << hiddenH[7][7] << " | " << endl;
+	cout << endl;
+}
+
+/*******************************************************************************************************************/
+
+int play = 1;
+string easyMode[4][4] = {};
+string normMode[6][6] = {};
+string hardMode[8][8] = {};
+
+int startChoice = 0;
+int startOptions() {
+	cout << "----- START OPTIONS ----- \n";
+	cout << "1. Play game \n";
+	cout << "2. Exit game \n \n";
+	while (startChoice < 1 || startChoice > 2) {
+		cout << "Enter choice (#): ";
+		cin >> startChoice;
+	}
+	if (startChoice == 2) {
+		play = 0;
+	}
+	system("cls");
+	return play;
+}
+
+
+int theme = 0;
+string faceTerm;
+string chooseTheme() {
+	cout << "----- PICK THEME ----- \n";
+	cout << "1. Household Objects \n";
+	cout << "2. C++ Key Terms \n";
+	cout << "3. Colors \n \n";
+	while (theme < 1 || theme > 3) { // require user to input # 1, 2, or 3
+		cout << "Choose your theme (#): "; // choose theme
+		cin >> theme;
+	}
+	if (theme == 1) {
+		for (int i = 0; i <= 50; i++) {
+			themeChoice[i] = themeHouseholdObjects[i]; // make a copy of array
+			faceTerm = "object";
+		}
+	}
+	else if (theme == 2) {
+		for (int i = 0; i <= 50; i++) {
+			themeChoice[i] = themeKeyTerms[i];
+			faceTerm = "keyterm";
+		}
+	}
+	else if (theme == 3) {
+		for (int i = 0; i <= 50; i++) {
+			themeChoice[i] = themeColors[i];
+			faceTerm = "color";
+		}
+	}
+	system("cls");
+	return themeChoice[50];
+}
+
+
+int mode = 0;
+int chooseMode() {
+	cout << "----- CHOOSE LEVEL MODE ----- \n";
+	cout << "1. 4x4 (EASY) \n";
+	cout << "2. 6x6 (NORMAL) \n";
+	cout << "3. 8x8 (HARD) \n";
+	cout << endl;
+	while (mode < 1 || mode > 3) {
+		cout << "Enter difficulty (1-3): ";
+		cin >> mode;
+	}
+	system("cls");
+	return mode;
+}
+
+int speedChoice = 0;
+int speed = 0;
+int chooseSpeed() {
+	cout << "----- CHOOSE SPEED MODE ----- \n";
+	cout << "1.) 5 seconds (EASY) \n";
+	cout << "2.) 3 seconds (NORMAL) \n";
+	cout << "3.) 1 second (HARD) \n";
+	cout << endl;
+	while (speedChoice < 1 || speedChoice > 3) {
+		cout << "Enter difficulty (1-3): ";
+		cin >> speedChoice;
+	}
+	if (speedChoice == 1) {
+		speed = 5;
+	}
+	else if (speedChoice == 2) {
+		speed = 3;
+	}
+	else {
+		speed = 1;
+	}
+	system("cls");
+	return speed;
+}
+
+/**************************************************************************************/
+
+int getChoiceE() {
+	int colChoice1 = 10;
+	int rowChoice1 = 10;
+	int colChoice2 = 10;
+	int rowChoice2 = 10;
+	int pair = 0;
+	int attempts = 0;
+	while (pair < 8) {
+		string holdChoice1;
+		string holdChoice2;
+		printBoardE();
+		cout << "Attempts: " << attempts << endl;
+		cout << "# of pairs found: " << pair << endl << endl;
+		cout << "- Card 1 -" << endl;
+		cout << "Enter column #: ";
+		cin >> colChoice1;
+		cout << "Enter row #: ";
+		cin >> rowChoice1;
+		while (hiddenE[rowChoice1 - 1][colChoice1 - 1] != faceTerm) {
+			cout << "Illegal move. Try again" << endl;
+			cout << "Enter column #: ";
+			cin >> colChoice1;
+			cout << "Enter row #: ";
+			cin >> rowChoice1;
+		}
+		hiddenE[rowChoice1 - 1][colChoice1 - 1] = easyMode[rowChoice1 - 1][colChoice1 - 1];
+		holdChoice1 = easyMode[rowChoice1 - 1][colChoice1 - 1];
+
+		system("cls");
+
+		printBoardE();// print user's card 1
+
+		cout << "- Card 2 - " << endl;
+		cout << "Enter column #: ";
+		cin >> colChoice2;
+		cout << "Enter row #: ";
+		cin >> rowChoice2;
+		while (hiddenE[rowChoice2 - 1][colChoice2 - 1] != faceTerm) {
+			cout << "Illegal move. Try again" << endl;
+			cout << "Enter column #: ";
+			cin >> colChoice2;
+			cout << "Enter row #: ";
+			cin >> rowChoice2;
+		}
+		hiddenE[rowChoice2 - 1][colChoice2 - 1] = easyMode[rowChoice2 - 1][colChoice2 - 1];
+		holdChoice2 = easyMode[rowChoice2 - 1][colChoice2 - 1];
+
+		system("cls");
+
+		printBoardE(); // print user's card 2
+
+		sleep(speed);
+
+		if (holdChoice1 != holdChoice2) {
+			hiddenE[rowChoice1 - 1][colChoice1 - 1] = faceTerm;
+			hiddenE[rowChoice2 - 1][colChoice2 - 1] = faceTerm;
+		}
+
+		else {
+			cout << "You got a match!" << endl;
+			pair++;
+			sleep(1);
+		}
+		system("cls");
+		attempts++;
+	}
+
+	return 0;
+}
+
+
+int getChoiceN() {
+	int colChoice1;
+	int rowChoice1;
+	int colChoice2;
+	int rowChoice2;
+	int pair = 0;
+	int attempts = 0;
+	while (pair < 18) {
+		string holdChoice1;
+		string holdChoice2;
+		printBoardN();
+		cout << "Attempts: " << attempts << endl;
+		cout << "# of pairs found: " << pair << endl << endl;
+		cout << "- Card 1 -" << endl;
+		cout << "Enter column #: ";
+		cin >> colChoice1;
+		cout << "Enter row #: ";
+		cin >> rowChoice1;
+		while (hiddenN[rowChoice1 - 1][colChoice1 - 1] != faceTerm) {
+			cout << "Illegal move. Try again" << endl;
+			cout << "Enter column #: ";
+			cin >> colChoice1;
+			cout << "Enter row #: ";
+			cin >> rowChoice1;
+		}
+		hiddenN[rowChoice1 - 1][colChoice1 - 1] = normMode[rowChoice1 - 1][colChoice1 - 1];
+		holdChoice1 = normMode[rowChoice1 - 1][colChoice1 - 1];
+
+		system("cls");
+
+		printBoardN();// print user's card 1
+
+		cout << "- Card 2 - " << endl;
+		cout << "Enter column #: ";
+		cin >> colChoice2;
+		cout << "Enter row #: ";
+		cin >> rowChoice2;
+
+		while (hiddenN[rowChoice2 - 1][colChoice2 - 1] != faceTerm) {
+			cout << "Illegal move. Try again" << endl;
+			cout << "Enter column #: ";
+			cin >> colChoice2;
+			cout << "Enter row #: ";
+			cin >> rowChoice2;
+		}
+
+		hiddenN[rowChoice2 - 1][colChoice2 - 1] = normMode[rowChoice2 - 1][colChoice2 - 1];
+		holdChoice2 = normMode[rowChoice2 - 1][colChoice2 - 1];
+
+		system("cls");
+
+		printBoardN(); // print user's card 2
+
+		sleep(speed);
+
+		if (holdChoice1 != holdChoice2) {
+			hiddenN[rowChoice1 - 1][colChoice1 - 1] = faceTerm;
+			hiddenN[rowChoice2 - 1][colChoice2 - 1] = faceTerm;
+		}
+
+		else {
+			cout << "You got a match!" << endl;
+			pair++;
+			sleep(1);
+		}
+		system("cls");
+		attempts++;
+	}
+
+	return 0;
+}
+
+
+int getChoiceH() {
+	int colChoice1;
+	int rowChoice1;
+	int colChoice2;
+	int rowChoice2;
+	int pair = 0;
+	int attempts = 0;
+	while (pair < 32) {
+		string holdChoice1;
+		string holdChoice2;
+		printBoardH();
+		cout << "Attempts: " << attempts << endl;
+		cout << "# of pairs found: " << pair << endl << endl;
+		cout << "- Card 1 -" << endl;
+		cout << "Enter column #: ";
+		cin >> colChoice1;
+		cout << "Enter row #: ";
+		cin >> rowChoice1;
+		while (hiddenH[rowChoice1 - 1][colChoice1 - 1] != faceTerm) {
+			cout << "Illegal move. Try again" << endl;
+			cout << "Enter column #: ";
+			cin >> colChoice1;
+			cout << "Enter row #: ";
+			cin >> rowChoice1;
+		}
+		hiddenH[rowChoice1 - 1][colChoice1 - 1] = hardMode[rowChoice1 - 1][colChoice1 - 1];
+		holdChoice1 = hardMode[rowChoice1 - 1][colChoice1 - 1];
+
+		system("cls");
+
+		printBoardH();// print user's card 1
+
+		cout << "- Card 2 - " << endl;
+		cout << "Enter column #: ";
+		cin >> colChoice2;
+		cout << "Enter row #: ";
+		cin >> rowChoice2;
+
+		while (hiddenH[rowChoice2 - 1][colChoice2 - 1] != faceTerm) {
+			cout << "Illegal move. Try again" << endl;
+			cout << "Enter column #: ";
+			cin >> colChoice2;
+			cout << "Enter row #: ";
+			cin >> rowChoice2;
+		}
+
+		hiddenH[rowChoice2 - 1][colChoice2 - 1] = hardMode[rowChoice2 - 1][colChoice2 - 1];
+		holdChoice2 = hardMode[rowChoice2 - 1][colChoice2 - 1];
+
+		system("cls");
+
+		printBoardH(); // print user's card 2
+
+		sleep(speed);
+
+		if (holdChoice1 != holdChoice2) {
+			hiddenH[rowChoice1 - 1][colChoice1 - 1] = faceTerm;
+			hiddenH[rowChoice2 - 1][colChoice2 - 1] = faceTerm;
+		}
+
+		else {
+			cout << "You got a match!" << endl;
+			pair++;
+			sleep(1);
+		}
+		system("cls");
+		attempts++;
+	}
+
+	return 0;
+}
+
+/**************************************************************************************/
+
+int main()
+{
+	int startChoice = startOptions();
+	while (startChoice == 1) {
+		int level = chooseMode();
+		chooseTheme();
+		int seconds = chooseSpeed();
+		srand(time(NULL));
+		int numIndex;
+		int arrayNumRange[50];
+		int size = 50;
+
+		////// EASY MODE /////// 
+
+		if (level == 1) {
+			int checkRepeat[8] = { 50 };
+			string cards[16];
+			int repeatNum[16];
+			for (int x = 0; x<50; x = x + 1) // array 0-49 numbers
+			{
+				arrayNumRange[x] = x + 1;
+			}
+
+			random_shuffle(&arrayNumRange[0], &arrayNumRange[49]); // shuffle 0-49 numbers
+
+			for (int i = 0; i < 8; i++) {
+				indexArrayE[i] = arrayNumRange[i]; // take first 8 numbers, store in indexArray
+			}
+
+			for (int i = 0; i < 8; i++) {
+				repeatNum[i] = indexArrayE[i]; //store indexArray values into repeatNum array
+			}
+
+			for (int i = 8; i < 16; i++) {
+				repeatNum[i] = indexArrayE[i - 8]; //duplicate indexArray values and put them into repeatNum
+			}
+
+			for (int i = 0; i < 16; i++) {
+				cards[i] = themeChoice[repeatNum[i]]; //theme choice
+													  //cout << cards[i] << endl;
+			}
+
+			for (int i = 0; i < 4; i++) {
+				for (int n = 0; n < 4; n++) {
+					easyMode[i][n] = "x";
+				}
+			}
+
+			int numRow = 0;
+			int numCol = 0;
+
+			for (int i = 0; i < 16; i++) {
+				numRow = rand() % 4;
+				numCol = rand() % 4;
+				while (easyMode[numRow][numCol] != "x") {
+					numRow = rand() % 4;
+					numCol = rand() % 4;
+				}
+				easyMode[numRow][numCol] = cards[i];
+			}
+
+
+			for (int i = 0; i < 4; i++) {
+				for (int n = 0; n < 4; n++) {
+					hiddenE[i][n] = faceTerm;
+				}
+			}
+
+			getChoiceE();
+			cout << "You win!" << endl;
+			cout << "Play again? (1/0): ";
+			cin >> startChoice;
+			if (startChoice == 0) {
+				break;
+			}
+		}
+
+		///// NORMAL MODE //////
+
+		else if (level == 2) {
+			int checkRepeat[18] = { 50 };
+			string cards[36];
+			int repeatNum[36];
+			for (int x = 0; x<50; x = x + 1) // array 0-49 numbers
+			{
+				arrayNumRange[x] = x + 1;
+			}
+
+			random_shuffle(&arrayNumRange[0], &arrayNumRange[49]); // shuffle 0-49 numbers
+
+			for (int i = 0; i < 18; i++) {
+				indexArrayN[i] = arrayNumRange[i]; // take first 8 numbers, store in indexArray
+			}
+
+			for (int i = 0; i < 18; i++) {
+				repeatNum[i] = indexArrayN[i]; //store indexArray values into repeatNum array
+			}
+
+			for (int i = 18; i < 36; i++) {
+				repeatNum[i] = indexArrayN[i - 18]; //duplicate indexArray values and put them into repeatNum
+			}
+
+			for (int i = 0; i < 36; i++) {
+				cards[i] = themeChoice[repeatNum[i]]; //theme choice
+													  //cout << cards[i] << endl;
+			}
+
+			for (int i = 0; i < 6; i++) {
+				for (int n = 0; n < 6; n++) {
+					normMode[i][n] = "x";
+				}
+			}
+
+			int numRow = 0;
+			int numCol = 0;
+
+			for (int i = 0; i < 36; i++) {
+				numRow = rand() % 6;
+				numCol = rand() % 6;
+				while (normMode[numRow][numCol] != "x") {
+					numRow = rand() % 6;
+					numCol = rand() % 6;
+				}
+				normMode[numRow][numCol] = cards[i];
+			}
+
+			for (int i = 0; i < 6; i++) {
+				for (int n = 0; n < 6; n++) {
+					hiddenN[i][n] = faceTerm;
+				}
+			}
+
+			getChoiceN();
+			cout << "You win!" << endl;
+			cout << "Play again? (1/0): ";
+			cin >> startChoice;
+			if (startChoice == 0) {
+				break;
+			}
+		}
+
+		//// HARD MODE ////
+
+		else {
+			int checkRepeat[32] = { 50 };
+			string cards[64];
+			int repeatNum[64];
+			for (int x = 0; x<50; x = x + 1) // array 0-49 numbers
+			{
+				arrayNumRange[x] = x + 1;
+			}
+
+			random_shuffle(&arrayNumRange[0], &arrayNumRange[49]); // shuffle 0-49 numbers
+
+			for (int i = 0; i < 32; i++) {
+				indexArrayH[i] = arrayNumRange[i]; // take first 8 numbers, store in indexArray
+			}
+
+			for (int i = 0; i < 32; i++) {
+				repeatNum[i] = indexArrayH[i]; //store indexArray values into repeatNum array
+			}
+
+			for (int i = 32; i < 64; i++) {
+				repeatNum[i] = indexArrayH[i - 32]; //duplicate indexArray values and put them into repeatNum
+			}
+
+			for (int i = 0; i < 64; i++) {
+				cards[i] = themeChoice[repeatNum[i]]; //theme choice
+													  //cout << cards[i] << endl;
+			}
+
+			for (int i = 0; i < 8; i++) {
+				for (int n = 0; n < 8; n++) {
+					hardMode[i][n] = "x";
+				}
+			}
+
+			int numRow = 0;
+			int numCol = 0;
+
+			for (int i = 0; i < 64; i++) {
+				numRow = rand() % 8;
+				numCol = rand() % 8;
+				while (hardMode[numRow][numCol] != "x") {
+					numRow = rand() % 8;
+					numCol = rand() % 8;
+				}
+				hardMode[numRow][numCol] = cards[i];
+			}
+
+			for (int i = 0; i < 8; i++) {
+				for (int n = 0; n < 8; n++) {
+					hiddenH[i][n] = faceTerm;
+				}
+			}
+
+			getChoiceH();
+			cout << "You win!" << endl;
+			cout << "Play again? (1/0): ";
+			cin >> startChoice;
+			if (startChoice == 0) {
+				break;
+			}
+		}
+	}
+
+	system("PAUSE");
+	return 0;
+}
